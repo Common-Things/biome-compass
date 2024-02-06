@@ -52,6 +52,7 @@ public class BiomeSelectionGui {
         for (int i = 0; i < biomesList.size(); i++) {
             Biome biome = biomesList.get(i);
             Identifier biomeId = biomes.getId(biome);
+            assert biomeId != null;
             String name = TextHelper.getBiomeNameFormatted(biomeId).getString();
             if (!name.contains(filter) && !biomeId.toString().contains(filter)) {
                 biomesList.remove(i);
@@ -67,7 +68,8 @@ public class BiomeSelectionGui {
             Identifier biomeId = biomes.getId(biome);
 
             String biomeColor = biome.getTemperature() > 1.0 ? "§c" : biome.getTemperature() < 0.15 ? "§b" : "§a";
-            String biomeNameString = biomeId.getPath().toString().replaceAll("_", " ");
+            assert biomeId != null;
+            String biomeNameString = biomeId.getPath().replaceAll("_", " ");
             Text biomeName = Text.of(biomeColor + biomeNameString);
 
             Item biomeItem = biome.getTemperature() > 1.0 ? Items.LAVA_BUCKET : biome.getTemperature() < 0.15 ? Items.SNOWBALL : Items.GRASS_BLOCK;
@@ -76,9 +78,9 @@ public class BiomeSelectionGui {
                     .setItem(biomeItem)
                     .setName(biomeName)
                     .setLore(new ArrayList<>(List.of(
-                            Text.translatable("gui.biomecompass.biome_compass.identifier", biomeId).formatted(Formatting.GRAY),
+                            Text.stringifiedTranslatable("gui.biomecompass.biome_compass.identifier", biomeId).formatted(Formatting.GRAY),
                             Text.translatable("gui.biomecompass.biome_compass.warmth", biome.getTemperature()).formatted(Formatting.GRAY),
-                            Text.translatable("gui.biomecompass.biome_compass.precipitation", biome.getPrecipitation(BlockPos.ORIGIN)).formatted(Formatting.GRAY)
+                            Text.stringifiedTranslatable("gui.biomecompass.biome_compass.precipitation", biome.getPrecipitation(BlockPos.ORIGIN)).formatted(Formatting.GRAY)
                     )))
                     .setCallback((index, type, action) -> {
                         gui.close();
